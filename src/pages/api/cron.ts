@@ -2,7 +2,7 @@ import type { APIRoute } from "astro"
 import { fetchWithTimeout, splitKeys } from "~/utils"
 import { localKey, genBillingsTable, baseURL, fetchBilling } from "."
 const sendKey = import.meta.env.SENDKEY
-const sendChannel = import.meta.env.SENDCHANNEL || "9"
+const sendChannel = import.meta.env.SENDCHANNEL || "wechat"
 
 export const get: APIRoute = async () => {
   try {
@@ -59,17 +59,32 @@ async function checkBan(key: string) {
   }
 }
 
+// async function push(title: string, desp?: string) {
+//   if (sendKey)
+//     await fetch(`https://sctapi.ftqq.com/${sendKey}.send`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify({
+//         title,
+//         desp,
+//         channel: Number.isInteger(sendChannel) ? Number(sendChannel) : 9
+//       })
+//     })
+// }
 async function push(title: string, desp?: string) {
   if (sendKey)
-    await fetch(`https://sctapi.ftqq.com/${sendKey}.send`, {
+    await fetch(`http://www.pushplus.plus/send/${sendKey}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
         title,
-        desp,
-        channel: Number.isInteger(sendChannel) ? Number(sendChannel) : 9
+        content: desp,
+        // channel: Number.isInteger(sendChannel) ? Number(sendChannel) : 9
+        channel: sendChannel
       })
     })
 }
